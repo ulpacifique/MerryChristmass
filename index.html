@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>✨ Christmas Magic ✨</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0a2a3f, #1a472a, #2c1a47);
+            min-height: 100vh;
+            color: white;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 15px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+        }
+
+        .image-container {
+            position: relative;
+            width: 250px;
+            height: 250px;
+            margin: 20px auto;
+            cursor: pointer;
+        }
+
+        .click-text {
+            position: absolute;
+            top: 150%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: rgb(235, 19, 232);
+            font-size: 1.2em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            pointer-events: none;
+        }
+
+        .christmas-image {
+            width: 200px;
+            height: 300px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        .particle {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            pointer-events: none;
+            transition: all 0.8s ease-out;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); }
+            50% { box-shadow: 0 5px 25px rgba(255, 215, 0, 0.5); }
+            100% { box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); }
+        }
+
+        .greeting {
+            font-size: 2em;
+            margin: 15px 0;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(45deg, #ffd700, #ff6b6b, #7fff00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% auto;
+            animation: gradient 3s linear infinite;
+        }
+
+        .greeting.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .message {
+            font-size: 1.2em;
+            margin: 15px 0;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .message.show {
+            opacity: 1;
+        }
+
+        .music-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 24px;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s;
+        }
+
+        @media (max-width: 480px) {
+            .image-container {
+                width: 200px;
+                height: 200px;
+            }
+            .greeting {
+                font-size: 1.5em;
+            }
+            .message {
+                font-size: 1em;
+            }
+        }
+    </style>
+
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="image-container" id="imageContainer" role="button" aria-label="Click to see magic" onclick="scatterImage()">
+                <img src="image/devine&Gasaro.jpg" alt="Christmas Magic Image" class="christmas-image" id="christmasImage" onerror="handleImageError()">
+                <div class="click-text">Click the above picture to see magic! ✨</div>
+            </div>
+            <div id="greeting" class="greeting">
+                <div>Merry Christmas! 🎄</div>
+                <div id="message" class="message">
+                    Wishing you a Merry Christmas filled with joy, love, laughter, and cherished moments. 
+                    May your day be truly magical! ✨
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="music-control" onclick="toggleMusic()" id="musicControl" role="button" aria-label="Toggle Music">🎵</div>
+
+    <audio id="backgroundMusic" loop>
+        <source src="audio/Katy Perry Roar Audio Only.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        let musicPlaying = false;
+        const backgroundMusic = document.getElementById('backgroundMusic');
+        const imageContainer = document.getElementById('imageContainer');
+        const christmasImage = document.getElementById('christmasImage');
+
+        function handleImageError() {
+            alert("Image not found. Please check the source.");
+            document.querySelector('.click-text').textContent = "Image unavailable. Still click for magic! ✨";
+        }
+
+        function createParticles() {
+            // Unchanged
+        }
+
+        function scatterImage() {
+            if (christmasImage.style.opacity === '0') return; // Prevent double-click issues
+            createParticles();
+            christmasImage.style.opacity = '0';
+            document.querySelector('.click-text').style.opacity = '0';
+            
+            setTimeout(() => {
+                imageContainer.style.display = 'none';
+                document.getElementById('greeting').classList.add('show');
+                document.getElementById('message').classList.add('show');
+                toggleMusic();
+            }, 800);
+        }
+
+        function toggleMusic() {
+            if (musicPlaying) {
+                backgroundMusic.pause();
+                document.getElementById('musicControl').textContent = '🎵';
+            } else {
+                backgroundMusic.play().catch(() => {
+                    alert("Unable to autoplay music. Please tap the 🎵 icon to play.");
+                });
+                document.getElementById('musicControl').textContent = '⏸️';
+            }
+            musicPlaying = !musicPlaying;
+        }
+
+        document.addEventListener('touchstart', function () {
+            const context = new (window.AudioContext || window.webkitAudioContext)();
+            if (context.state === 'suspended') {
+                context.resume();
+            }
+        });
+    </script>
+</body>
+</html>
